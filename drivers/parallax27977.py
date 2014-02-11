@@ -39,10 +39,12 @@ class Parallax27977Driver:
 		"""Move the cursor to (column, row), zero-indexed. Returns True on success, otherwise False."""
 		self._ensureStarted()
 
+		if row < 0 or column < 0:
+			return False
 		if row >= self.rows or column >= self.columns:
 			return False
 
-		pos = 0x80 + (row * 0x0F) + column
+		pos = 0x80 + (row * 0x13) + column
 		self._pos = (column, row)
 		self._s.write(bytes([pos]))
 		return True
@@ -73,6 +75,7 @@ class Parallax27977Driver:
 		# Remove tricky state altering characters.
 		asciidata.strip(bytes(range(0, 31)))
 		self._s.write(asciidata)
+		self._pos = (self._pos[0] + len(asciidata), self._pos[1])
 
 	def _ensureStarted(self):
 		if not self._started:
