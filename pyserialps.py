@@ -1,6 +1,8 @@
 import sys
 import drivers
 import serial
+import time
+import psutil
 
 COM_PORT_NAME 	= 	"COM3"
 BAUD_RATE		=	9600
@@ -12,12 +14,14 @@ def _run(portname, baudrate, driver_factory):
 
 		try:
 			d.startup()
-			d.write("hello world o__o")
-			d.goto(0, 1)
-			d.write("hello terra")
 
 			while True:
-				pass
+				d.goto(0, 0)
+				d.write("CPU {0:>6.1%} ".format(psutil.cpu_percent(interval=0.1) * 0.01))
+				d.goto(0, 1)
+				mem = psutil.virtual_memory()
+				d.write("MEM {0:>6.1%} ".format(mem.percent * 0.01))
+				time.sleep(0.65)
 
 		except KeyboardInterrupt:
 			d.shutdown()

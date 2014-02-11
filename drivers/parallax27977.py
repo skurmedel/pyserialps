@@ -44,7 +44,7 @@ class Parallax27977Driver:
 		if row >= self.rows or column >= self.columns:
 			return False
 
-		pos = 0x80 + (row * 0x13) + column
+		pos = 0x80 + (row * 0x14) + column
 		self._pos = (column, row)
 		self._s.write(bytes([pos]))
 		return True
