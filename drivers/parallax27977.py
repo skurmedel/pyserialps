@@ -64,8 +64,11 @@ class Parallax27977Driver:
 		"""
 		self._ensureStarted()
 
-		if len(text) + self._pos[0] > self.columns:
-			text = text[:len(text) - self._pos[0]]
+		textlen = len(text)
+		endpos = self._pos[0] + textlen
+		if endpos > self.columns - 1:
+			text = text[:self.columns - self._pos[0]]
+
 		asciidata = text.encode("ASCII")
 		# Remove tricky state altering characters.
 		asciidata.strip(bytes(range(0, 31)))
